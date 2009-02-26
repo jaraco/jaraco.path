@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import os
+
 class RelativePath(str):
 	"""
 	An object that abstracts and simplifies path handling.  Just
@@ -7,12 +9,9 @@ class RelativePath(str):
 	suitable path.
 	
 	>>> p = RelativePath(r'c:\Windows')
-	>>> p('System32') == r'c:\Windows\System32'
+	>>> p('System32') == os.path.join(r'c:\Windows', 'System32')
 	True
 	"""
-	def __new__(self, value):
-		return str.__new__(self, value)
-
 	def __call__(self, *children):
 		return RelativePath(os.path.join(self, *children))
 	
@@ -21,3 +20,10 @@ class RelativePath(str):
 	#def __add__(self, child):
 	#	return self(child)
 
+	def __div__(self, child):
+		"""
+		Override / for getting a child path
+		>>> RelativePath("/usr") / 'bin' == os.path.join('/usr', 'bin')
+		True
+		"""
+		return self(child)
