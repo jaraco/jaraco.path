@@ -3,7 +3,7 @@
 """fstools.py:
 	tools for working with files and file systems
 	
-Copyright © 2004 Jason R. Coombs  
+Copyright (c) 2004 Jason R. Coombs  
 """
 
 __author__ = 'Jason R. Coombs <jaraco@jaraco.com>'
