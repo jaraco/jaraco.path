@@ -1,9 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-"""fstools.py:
+"""jaraco.filesystem:
 	tools for working with files and file systems
 	
-Copyright (c) 2004 Jason R. Coombs  
+Copyright © 2004 Jason R. Coombs  
 """
 
 __author__ = 'Jason R. Coombs <jaraco@jaraco.com>'
