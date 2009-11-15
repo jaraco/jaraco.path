@@ -11,7 +11,12 @@ __version__ = '$Rev$'[6:-2]
 __svnauthor__ = '$Author$'[9:-2]
 __date__ = '$Date$'[7:-2]
 
-import os, itertools
+import os
+import itertools
+import calendar
+import logging
+
+log = logging.getLogger(__name__)
 
 def GetUniquePathname(path, root = ''):
 	"""Return a pathname possibly with a number appended to it so that it is
@@ -36,3 +41,12 @@ def __splitext__(filepath):
 		return filepath, ''
 	else:
 		return os.path.splitext(filepath)
+
+def set_time(filename, mod_time):
+	"""
+	Set the modified time of a file
+	"""
+	log.debug('Setting modified time to %s', mod_time)
+	mtime = calendar.timegm(mod_time.utctimetuple())
+	atime = os.stat(filename).st_atime
+	os.utime(filename, (atime, mtime))
