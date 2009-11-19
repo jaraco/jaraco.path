@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import division
 
 import os
 import re
@@ -21,7 +22,7 @@ class RelativePath(str):
 	#def __add__(self, child):
 	#	return self(child)
 
-	def __div__(self, child):
+	def __truediv__(self, child):
 		"""
 		Override / for getting a child path
 		>>> RelativePath("/usr") / 'bin' == os.path.join('/usr', 'bin')
