@@ -3,6 +3,7 @@ from __future__ import division
 
 import os
 import re
+import tempfile
 
 class RelativePath(str):
 	"""
@@ -41,3 +42,24 @@ def encode(name, system='NTFS'):
 	pattern = '|'.join(map(re.escape, special_characters))
 	pattern = re.compile(pattern)
 	return pattern.sub('_', name)
+
+class save_to_file():
+	"""
+	A context manager for saving some content to a file, and then
+	cleaning up the file afterward.
+	
+	>>> with save_to_file('foo') as filename: assert 'foo' == open(filename).read()
+	"""
+	def __init__(self, content):
+		self.content = content
+
+	def __enter__(self):
+		fd, self.filename = tempfile.mkstemp()
+		file = os.fdopen(fd, 'wb')
+		file.write(self.content)
+		file.close()
+		return self.filename
+
+	def __exit__(self, type, value, traceback):
+		os.remove(self.filename)
+
