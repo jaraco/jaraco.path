@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-from __future__ import division
+from __future__ import division, absolute_import
 
 import os
 import re
 import tempfile
+import functools
 
 class RelativePath(str):
 	"""
@@ -63,3 +64,23 @@ class save_to_file():
 	def __exit__(self, type, value, traceback):
 		os.remove(self.filename)
 
+def replace_extension(new_ext, filename):
+	"""
+	>>> replace_extension('.pdf', 'myfile.doc')
+	'myfile.pdf'
+	"""
+	return os.path.splitext(filename)[0] + new_ext
+
+def ExtensionReplacer(new_ext):
+	"""
+	A reusable function to replace a file's extension with another
+	
+	>>> repl = ExtensionReplacer('.pdf')
+	>>> repl('myfile.doc')
+	'myfile.pdf'
+	>>> repl('myfile.txt')
+	'myfile.pdf'
+	>>> repl('myfile')
+	'myfile.pdf'
+	"""
+	return functools.partial(replace_extension, new_ext)
