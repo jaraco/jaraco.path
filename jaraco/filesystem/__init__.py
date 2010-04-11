@@ -6,6 +6,8 @@
 Copyright © 2004 Jason R. Coombs  
 """
 
+from __future__ import division
+
 __author__ = 'Jason R. Coombs <jaraco@jaraco.com>'
 __version__ = '$Rev$'[6:-2]
 __svnauthor__ = '$Author$'[9:-2]
@@ -15,6 +17,7 @@ import os
 import itertools
 import calendar
 import logging
+import datetime
 
 log = logging.getLogger(__name__)
 
@@ -48,5 +51,14 @@ def set_time(filename, mod_time):
 	"""
 	log.debug('Setting modified time to %s', mod_time)
 	mtime = calendar.timegm(mod_time.utctimetuple())
+	# utctimetuple discards microseconds, so restore it (for consistency)
+	mtime += mod_time.microsecond / 1000000
 	atime = os.stat(filename).st_atime
 	os.utime(filename, (atime, mtime))
+
+def get_time(filename):
+	"""
+	Get the modified time for a file as a datetime instance
+	"""
+	ts = os.stat(filename).st_mtime
+	return datetime.datetime.utcfromtimestamp(ts)
