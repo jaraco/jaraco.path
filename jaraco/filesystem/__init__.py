@@ -74,3 +74,33 @@ def insert_before_extension(filename, content):
 	parts = list(os.path.splitext(filename))
 	parts[1:1] = [content]
 	return ''.join(parts)
+
+from contextlib import contextmanager
+
+class DirectoryStack(list):
+	r"""
+	...
+	
+	DirectoryStack includes a context manager function that can be used
+	to easily perform an operation in a separate directory.
+	
+	>>> orig_dir = os.getcwd()
+	>>> stack = DirectoryStack()
+	>>> with stack.context('c:\\'): context_dir = os.getcwd()
+	>>> orig_dir == os.getcwd()
+	True
+	>>> orig_dir == context_dir
+	False
+	"""
+	def pushd(self, new_dir):
+		self.append(os.getcwd())
+		os.chdir(new_dir)
+
+	def popd(self):
+		os.chdir(self.pop())
+
+	@contextmanager
+	def context(self, new_dir):
+		self.pushd(new_dir)
+		yield
+		self.popd()
