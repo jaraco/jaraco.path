@@ -1,21 +1,18 @@
 # -*- coding: UTF-8 -*-
 
-"""jaraco.filesystem:
+"""
+jaraco.filesystem:
 	tools for working with files and file systems
-	
-Copyright © 2004 Jason R. Coombs  
+
+Copyright © 2004 Jason R. Coombs
 """
 
 from __future__ import division
 
-__author__ = 'Jason R. Coombs <jaraco@jaraco.com>'
-__version__ = '$Rev$'[6:-2]
-__svnauthor__ = '$Author$'[9:-2]
-__date__ = '$Date$'[7:-2]
-
 import os
 import itertools
 import calendar
+import contextlib
 import logging
 import datetime
 
@@ -67,7 +64,7 @@ def insert_before_extension(filename, content):
 	"""
 	Given a filename and some content, insert the content just before
 	the extension.
-	
+
 	>>> insert_before_extension('pages.pdf', '-old')
 	'pages-old.pdf'
 	"""
@@ -75,32 +72,46 @@ def insert_before_extension(filename, content):
 	parts[1:1] = [content]
 	return ''.join(parts)
 
-from contextlib import contextmanager
-
 class DirectoryStack(list):
 	r"""
 	...
-	
+
 	DirectoryStack includes a context manager function that can be used
 	to easily perform an operation in a separate directory.
-	
+
 	>>> orig_dir = os.getcwd()
 	>>> stack = DirectoryStack()
-	>>> with stack.context('c:\\'): context_dir = os.getcwd()
+	>>> with stack.context('/'): context_dir = os.getcwd()
 	>>> orig_dir == os.getcwd()
 	True
 	>>> orig_dir == context_dir
 	False
+	>>> len(stack)
+	0
+	>>> stack.pushd('/')
+	>>> len(stack)
+	1
+	>>> os.getcwd() == os.path.abspath('/')
+	True
+	>>> last_dir = stack.popd()
+	>>> last_dir == context_dir
+	True
+	>>> os.getcwd() == orig_dir
+	True
 	"""
 	def pushd(self, new_dir):
 		self.append(os.getcwd())
 		os.chdir(new_dir)
 
 	def popd(self):
+		res = os.getcwd()
 		os.chdir(self.pop())
+		return res
 
-	@contextmanager
+	@contextlib.contextmanager
 	def context(self, new_dir):
 		self.pushd(new_dir)
-		yield
-		self.popd()
+		try:
+			yield
+		finally:
+			self.popd()
