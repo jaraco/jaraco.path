@@ -5,20 +5,21 @@ import os
 import re
 import tempfile
 import functools
+import contextlib
 
 class RelativePath(str):
 	"""
 	An object that abstracts and simplifies path handling.  Just
 	create one and either call a child path and you should get a
 	suitable path.
-	
+
 	>>> p = RelativePath(r'c:\Windows')
 	>>> p('System32') == os.path.join(r'c:\Windows', 'System32')
 	True
 	"""
 	def __call__(self, *children):
 		return RelativePath(os.path.join(self, *children))
-	
+
 	# can't override the __add__ because os.path.join uses it
 	#  to append a backslash.
 	#def __add__(self, child):
@@ -48,7 +49,7 @@ class save_to_file():
 	"""
 	A context manager for saving some content to a file, and then
 	cleaning up the file afterward.
-	
+
 	>>> with save_to_file('foo') as filename: assert 'foo' == open(filename).read()
 	"""
 	def __init__(self, content):
@@ -64,6 +65,19 @@ class save_to_file():
 	def __exit__(self, type, value, traceback):
 		os.remove(self.filename)
 
+@contextlib.contextmanager
+def tempfile_context(*args, **kwargs):
+	"""
+	A wrapper around tempfile.mkstemp to create the file in a context and
+	delete it after.
+	"""
+	fd, filename = tempfile.mkstemp(*args, **kwargs)
+	os.close(fd)
+	try:
+		yield filename
+	finally:
+		os.remove(filename)
+
 def replace_extension(new_ext, filename):
 	"""
 	>>> replace_extension('.pdf', 'myfile.doc')
@@ -74,7 +88,7 @@ def replace_extension(new_ext, filename):
 def ExtensionReplacer(new_ext):
 	"""
 	A reusable function to replace a file's extension with another
-	
+
 	>>> repl = ExtensionReplacer('.pdf')
 	>>> repl('myfile.doc')
 	'myfile.pdf'
