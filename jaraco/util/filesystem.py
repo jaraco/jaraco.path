@@ -82,3 +82,15 @@ def ensure_dir_exists(func):
 			os.makedirs(dir)
 		return dir
 	return make_if_not_present
+
+def read_chunks(file, chunk_size=2048, update_func=lambda x: None):
+	"""
+	Read file in chunks of size chunk_size (or smaller).
+	If update_func is specified, call it on every chunk with the amount
+	read.
+	"""
+	while(True):
+		res = file.read(chunkSize)
+		if not res: break
+		updateFunc(len(res))
+		yield res
