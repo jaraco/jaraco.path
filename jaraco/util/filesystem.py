@@ -92,5 +92,5 @@ def read_chunks(file, chunk_size=2048, update_func=lambda x: None):
 	while(True):
 		res = file.read(chunkSize)
 		if not res: break
-		updateFunc(len(res))
+		update_func(len(res))
 		yield res
