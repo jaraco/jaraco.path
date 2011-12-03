@@ -7,7 +7,7 @@ jaraco.filesystem:
 Copyright © 2004, 2011 Jason R. Coombs
 """
 
-from __future__ import division
+from __future__ import division, unicode_literals
 
 import os
 import itertools
@@ -61,7 +61,7 @@ def insert_before_extension(filename, content):
 	the extension.
 
 	>>> insert_before_extension('pages.pdf', '-old')
-	'pages-old.pdf'
+	u'pages-old.pdf'
 	"""
 	parts = list(os.path.splitext(filename))
 	parts[1:1] = [content]

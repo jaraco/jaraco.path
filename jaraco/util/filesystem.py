@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import division, absolute_import
+from __future__ import division, absolute_import, unicode_literals
 
 import os
 import re
@@ -11,7 +11,7 @@ def encode(name, system='NTFS'):
 	"""
 	Encode the name for a suitable name in the given filesystem
 	>>> encode('Test :1')
-	'Test _1'
+	u'Test _1'
 	"""
 	assert system == 'NTFS', 'unsupported filesystem'
 	special_characters = r'<>:"/\|?*' + ''.join(map(chr, range(32)))
@@ -55,7 +55,7 @@ def tempfile_context(*args, **kwargs):
 def replace_extension(new_ext, filename):
 	"""
 	>>> replace_extension('.pdf', 'myfile.doc')
-	'myfile.pdf'
+	u'myfile.pdf'
 	"""
 	return os.path.splitext(filename)[0] + new_ext
 
@@ -65,11 +65,11 @@ def ExtensionReplacer(new_ext):
 
 	>>> repl = ExtensionReplacer('.pdf')
 	>>> repl('myfile.doc')
-	'myfile.pdf'
+	u'myfile.pdf'
 	>>> repl('myfile.txt')
-	'myfile.pdf'
+	u'myfile.pdf'
 	>>> repl('myfile')
-	'myfile.pdf'
+	u'myfile.pdf'
 	"""
 	return functools.partial(replace_extension, new_ext)
 
