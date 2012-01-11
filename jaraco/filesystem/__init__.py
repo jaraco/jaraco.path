@@ -15,6 +15,7 @@ import calendar
 import contextlib
 import logging
 import datetime
+import glob
 
 log = logging.getLogger(__name__)
 
@@ -110,3 +111,28 @@ class DirectoryStack(list):
 			yield
 		finally:
 			self.popd()
+
+def recursive_glob(root, spec):
+	"""
+	Like iglob, but recurse directories
+
+	>>> any('filesystem.py' in result for result in recursive_glob('.', '*.py'))
+	True
+
+	>>> all(result.startswith('.') for result in recursive_glob('.', '*.py'))
+	True
+
+	>>> len(list(recursive_glob('.', '*.foo')))
+	0
+
+	"""
+	specs = (
+		os.path.join(dirpath, dirname, spec)
+		for dirpath, dirnames, filenames in os.walk(root)
+		for dirname in dirnames
+	)
+
+	return itertools.chain.from_iterable(
+		glob.iglob(spec)
+		for spec in specs
+	)
