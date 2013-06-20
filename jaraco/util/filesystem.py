@@ -11,7 +11,7 @@ def encode(name, system='NTFS'):
 	"""
 	Encode the name for a suitable name in the given filesystem
 	>>> encode('Test :1')
-	u'Test _1'
+	'Test _1'
 	"""
 	assert system == 'NTFS', 'unsupported filesystem'
 	special_characters = r'<>:"/\|?*' + ''.join(map(chr, range(32)))
@@ -24,17 +24,18 @@ class save_to_file():
 	A context manager for saving some content to a file, and then
 	cleaning up the file afterward.
 
-	>>> with save_to_file('foo') as filename: assert 'foo' == open(filename).read()
+	>>> with save_to_file(b'foo') as filename:
+	...     assert 'foo' == open(filename).read()
 	"""
 	def __init__(self, content):
 		self.content = content
 
 	def __enter__(self):
-		fd, self.filename = tempfile.mkstemp()
-		file = os.fdopen(fd, 'wb')
-		file.write(self.content)
-		file.close()
-		return self.filename
+		tf = tempfile.NamedTemporaryFile(delete=False)
+		tf.write(self.content)
+		tf.close()
+		self.filename = tf.name
+		return tf.name
 
 	def __exit__(self, type, value, traceback):
 		os.remove(self.filename)
@@ -55,7 +56,7 @@ def tempfile_context(*args, **kwargs):
 def replace_extension(new_ext, filename):
 	"""
 	>>> replace_extension('.pdf', 'myfile.doc')
-	u'myfile.pdf'
+	'myfile.pdf'
 	"""
 	return os.path.splitext(filename)[0] + new_ext
 
@@ -65,11 +66,11 @@ def ExtensionReplacer(new_ext):
 
 	>>> repl = ExtensionReplacer('.pdf')
 	>>> repl('myfile.doc')
-	u'myfile.pdf'
+	'myfile.pdf'
 	>>> repl('myfile.txt')
-	u'myfile.pdf'
+	'myfile.pdf'
 	>>> repl('myfile')
-	u'myfile.pdf'
+	'myfile.pdf'
 	"""
 	return functools.partial(replace_extension, new_ext)
 
