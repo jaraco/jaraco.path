@@ -1,10 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 """
-jaraco.filesystem:
-	tools for working with files and file systems
-
-Copyright © 2004, 2011, 2013 Jason R. Coombs
+Tools for working with files and file systems
 """
 
 from __future__ import division, unicode_literals
