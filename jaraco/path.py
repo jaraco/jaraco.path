@@ -116,7 +116,7 @@ def recursive_glob(root, spec):
 	"""
 	Like iglob, but recurse directories
 
-	>>> any('filesystem.py' in result for result in recursive_glob('.', '*.py'))
+	>>> any('path.py' in result for result in recursive_glob('.', '*.py'))
 	True
 
 	>>> all(result.startswith('.') for result in recursive_glob('.', '*.py'))
