@@ -1,0 +1,4 @@
+1.0
+===
+
+Initial released based on jaraco.util 10.13.
