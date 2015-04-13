@@ -25,6 +25,7 @@ setup_params = dict(
 	url="https://bitbucket.org/jaraco/jaraco.path",
 	packages=setuptools.find_packages(),
 	install_requires=[
+		'six',
 	],
 	setup_requires=[
 		'setuptools_scm',

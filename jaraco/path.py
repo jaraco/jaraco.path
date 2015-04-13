@@ -17,6 +17,8 @@ import datetime
 import glob
 import tempfile
 
+from six.moves import map
+
 log = logging.getLogger(__name__)
 
 def get_unique_pathname(path, root = ''):
@@ -32,7 +34,7 @@ def __get_numbered_paths(filepath):
 	"""Append numbers in sequential order to the filename or folder name
 	Numbers should be appended before the extension on a filename."""
 	format = '%s (%%d)%s' % splitext_files_only(filepath)
-	return itertools.imap(lambda n: format % n, itertools.count(1))
+	return map(lambda n: format % n, itertools.count(1))
 
 def splitext_files_only(filepath):
 	"Custom version of splitext that doesn't perform splitext on directories"
