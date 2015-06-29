@@ -1,3 +1,8 @@
+1.1
+===
+
+Add cross platform is_hidden function.
+
 1.0
 ===
 
