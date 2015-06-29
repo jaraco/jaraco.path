@@ -16,6 +16,9 @@ import logging
 import datetime
 import glob
 import tempfile
+import platform
+import ctypes
+import importlib
 
 import six
 from six.moves import map
@@ -228,3 +231,28 @@ def read_chunks(file, chunk_size=2048, update_func=lambda x: None):
 		if not res: break
 		update_func(len(res))
 		yield res
+
+def is_hidden(path):
+	"""
+	Check whether a file is presumed hidden, either because
+	the pathname starts with dot or because the platform
+	indicates such.
+	"""
+	full_path = os.path.abspath(path)
+	name = os.path.basename(full_path)
+	no = lambda path: False
+	platform_hidden = globals().get('is_hidden_' + platform.system(), no)
+	return name.startswith('.') or platform_hidden(full_path)
+
+def is_hidden_Windows(path):
+	res = ctypes.windll.kernel32.GetFileAttributesW(path)
+	assert res != -1
+	return bool(res & 2)
+
+def is_hidden_Darwin(path):
+	Foundation = importlib.import_module('Foundation')
+	url = Foundation.NSURL.fileURLWithPath_(path)
+	res = url.getResourceValue_forKey_error_(
+		None, Foundation.NSURLIsHiddenKey, None
+	)
+	return res[1]
