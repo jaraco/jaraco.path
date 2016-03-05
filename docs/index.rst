@@ -1,5 +1,5 @@
 Welcome to jaraco.path documentation!
-========================================
+=====================================
 
 .. toctree::
    :maxdepth: 1
