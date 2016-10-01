@@ -1,3 +1,8 @@
+1.2
+===
+
+Move to Github and configure automatic releases via Travis-CI.
+
 1.1
 ===
 
