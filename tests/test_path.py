@@ -7,12 +7,14 @@ import pytest
 
 from jaraco import path
 
+
 def test_is_hidden_not(tmpdir):
 	"""
 	A visible directory is not hidden.
 	"""
 	target = six.text_type(tmpdir)
 	assert not path.is_hidden(target)
+
 
 def test_is_hidden_not_abspath(tmpdir):
 	"""
@@ -22,10 +24,13 @@ def test_is_hidden_not_abspath(tmpdir):
 	target = six.text_type(tmpdir) + '/.'
 	assert not path.is_hidden(target)
 
+
 def test_is_hidden():
 	assert path.is_hidden('.hg')
 
-@pytest.mark.skipif(platform.system() != 'Windows',
+
+@pytest.mark.skipif(
+	platform.system() != 'Windows',
 	reason="Windows only")
 def test_is_hidden_Windows(tmpdir):
 	target = os.path.join(tmpdir, 'test')
@@ -33,7 +38,9 @@ def test_is_hidden_Windows(tmpdir):
 	assert path.is_hidden(target)
 	assert path.is_hidden_Windows(target)
 
-@pytest.mark.skipif(platform.system() != 'Darwin',
+
+@pytest.mark.skipif(
+	platform.system() != 'Darwin',
 	reason="Darwin only")
 def test_is_hidden_Darwin():
 	# cheat because ~/Library is presumably hidden

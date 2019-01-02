@@ -25,7 +25,8 @@ from six.moves import map
 
 log = logging.getLogger(__name__)
 
-def get_unique_pathname(path, root = ''):
+
+def get_unique_pathname(path, root=''):
 	"""Return a pathname possibly with a number appended to it so that it is
 	unique in the directory."""
 	path = os.path.join(root, path)
@@ -34,15 +35,20 @@ def get_unique_pathname(path, root = ''):
 	potentialPaths = six.moves.filterfalse(os.path.exists, potentialPaths)
 	return next(potentialPaths)
 
+
 def __get_numbered_paths(filepath):
 	"""Append numbers in sequential order to the filename or folder name
 	Numbers should be appended before the extension on a filename."""
 	format = '%s (%%d)%s' % splitext_files_only(filepath)
 	return map(lambda n: format % n, itertools.count(1))
 
+
 def splitext_files_only(filepath):
 	"Custom version of splitext that doesn't perform splitext on directories"
-	return (filepath, '') if os.path.isdir(filepath) else os.path.splitext(filepath)
+	return (
+		(filepath, '') if os.path.isdir(filepath) else os.path.splitext(filepath)
+	)
+
 
 def set_time(filename, mod_time):
 	"""
@@ -55,12 +61,14 @@ def set_time(filename, mod_time):
 	atime = os.stat(filename).st_atime
 	os.utime(filename, (atime, mtime))
 
+
 def get_time(filename):
 	"""
 	Get the modified time for a file as a datetime instance
 	"""
 	ts = os.stat(filename).st_mtime
 	return datetime.datetime.utcfromtimestamp(ts)
+
 
 def insert_before_extension(filename, content):
 	"""
@@ -73,6 +81,7 @@ def insert_before_extension(filename, content):
 	parts = list(os.path.splitext(filename))
 	parts[1:1] = [content]
 	return ''.join(parts)
+
 
 class DirectoryStack(list):
 	r"""
@@ -118,6 +127,7 @@ class DirectoryStack(list):
 		finally:
 			self.popd()
 
+
 def recursive_glob(root, spec):
 	"""
 	Like iglob, but recurse directories
@@ -143,6 +153,7 @@ def recursive_glob(root, spec):
 		for spec in specs
 	)
 
+
 def encode(name, system='NTFS'):
 	"""
 	Encode the name for a suitable name in the given filesystem
@@ -154,6 +165,7 @@ def encode(name, system='NTFS'):
 	pattern = '|'.join(map(re.escape, special_characters))
 	pattern = re.compile(pattern)
 	return pattern.sub('_', name)
+
 
 class save_to_file():
 	"""
@@ -176,6 +188,7 @@ class save_to_file():
 	def __exit__(self, type, value, traceback):
 		os.remove(self.filename)
 
+
 @contextlib.contextmanager
 def tempfile_context(*args, **kwargs):
 	"""
@@ -189,12 +202,14 @@ def tempfile_context(*args, **kwargs):
 	finally:
 		os.remove(filename)
 
+
 def replace_extension(new_ext, filename):
 	"""
 	>>> replace_extension('.pdf', 'myfile.doc')
 	'myfile.pdf'
 	"""
 	return os.path.splitext(filename)[0] + new_ext
+
 
 def ExtensionReplacer(new_ext):
 	"""
@@ -210,6 +225,7 @@ def ExtensionReplacer(new_ext):
 	"""
 	return functools.partial(replace_extension, new_ext)
 
+
 def ensure_dir_exists(func):
 	"wrap a function that returns a dir, making sure it exists"
 	@functools.wraps(func)
@@ -220,6 +236,7 @@ def ensure_dir_exists(func):
 		return dir
 	return make_if_not_present
 
+
 def read_chunks(file, chunk_size=2048, update_func=lambda x: None):
 	"""
 	Read file in chunks of size chunk_size (or smaller).
@@ -228,9 +245,11 @@ def read_chunks(file, chunk_size=2048, update_func=lambda x: None):
 	"""
 	while(True):
 		res = file.read(chunk_size)
-		if not res: break
+		if not res:
+			break
 		update_func(len(res))
 		yield res
+
 
 def is_hidden(path):
 	"""
@@ -240,14 +259,18 @@ def is_hidden(path):
 	"""
 	full_path = os.path.abspath(path)
 	name = os.path.basename(full_path)
-	no = lambda path: False
+
+	def no(path):
+		return False
 	platform_hidden = globals().get('is_hidden_' + platform.system(), no)
 	return name.startswith('.') or platform_hidden(full_path)
+
 
 def is_hidden_Windows(path):
 	res = ctypes.windll.kernel32.GetFileAttributesW(path)
 	assert res != -1
 	return bool(res & 2)
+
 
 def is_hidden_Darwin(path):
 	Foundation = importlib.import_module('Foundation')
