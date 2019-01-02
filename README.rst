@@ -3,14 +3,14 @@
 
 .. image:: https://img.shields.io/pypi/pyversions/jaraco.path.svg
 
-.. image:: https://img.shields.io/pypi/dm/jaraco.path.svg
+.. image:: https://img.shields.io/travis/jaraco/jaraco.path/master.svg
+   :target: https://travis-ci.org/jaraco/jaraco.path
+
+.. .. image:: https://img.shields.io/appveyor/ci/jaraco/skeleton/master.svg
+..    :target: https://ci.appveyor.com/project/jaraco/skeleton/branch/master
 
 .. image:: https://img.shields.io/travis/jaraco/jaraco.path/master.svg
-   :target: http://travis-ci.org/jaraco/jaraco.path
-
-License is indicated in the project metadata (typically one or more
-of the Trove classifiers). For more details, see `this explanation
-<https://github.com/jaraco/skeleton/issues/1>`_.
+   :target: https://travis-ci.org/jaraco/jaraco.path
 
 Hidden File Detection
 ---------------------
