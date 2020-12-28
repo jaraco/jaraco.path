@@ -1,6 +1,5 @@
 import os
 import platform
-import ctypes
 
 import pytest
 
@@ -28,10 +27,12 @@ def test_is_hidden():
     assert path.is_hidden('.hg')
 
 
-@pytest.mark.skipif(platform.system() != 'Windows', reason="Windows only")
 def test_is_hidden_Windows(tmpdir):
+    SetFileAttributes = pytest.importorskip(
+        'jaraco.windows.api.filesystem.SetFileAttributes'
+    )
     target = os.path.join(tmpdir, 'test')
-    ctypes.SetFileAttributes(target, 2)
+    SetFileAttributes(target, 2)
     assert path.is_hidden(target)
     assert path.is_hidden_Windows(target)
 
