@@ -1,16 +1,22 @@
 .. image:: https://img.shields.io/pypi/v/jaraco.path.svg
-   :target: https://pypi.org/project/jaraco.path
+   :target: `PyPI link`_
 
 .. image:: https://img.shields.io/pypi/pyversions/jaraco.path.svg
+   :target: `PyPI link`_
 
-.. image:: https://img.shields.io/travis/jaraco/jaraco.path/master.svg
-   :target: https://travis-ci.org/jaraco/jaraco.path
+.. _PyPI link: https://pypi.org/project/jaraco.path
 
-.. .. image:: https://img.shields.io/appveyor/ci/jaraco/skeleton/master.svg
-..    :target: https://ci.appveyor.com/project/jaraco/skeleton/branch/master
+.. image:: https://github.com/jaraco/jaraco.path/workflows/Automated%20Tests/badge.svg
+   :target: https://github.com/jaraco/jaraco.path/actions?query=workflow%3A%22Automated+Tests%22
+   :alt: Automated Tests
 
-.. image:: https://img.shields.io/travis/jaraco/jaraco.path/master.svg
-   :target: https://travis-ci.org/jaraco/jaraco.path
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+   :alt: Code style: Black
+
+.. .. image:: https://readthedocs.org/projects/skeleton/badge/?version=latest
+..    :target: https://skeleton.readthedocs.io/en/latest/?badge=latest
+
 
 Hidden File Detection
 ---------------------
