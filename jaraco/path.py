@@ -1,10 +1,6 @@
-# -*- coding: UTF-8 -*-
-
 """
 Tools for working with files and file systems
 """
-
-from __future__ import division, unicode_literals, absolute_import
 
 import os
 import re
