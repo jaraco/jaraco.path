@@ -2,7 +2,6 @@ import os
 import platform
 import ctypes
 
-import six
 import pytest
 
 from jaraco import path
@@ -12,7 +11,7 @@ def test_is_hidden_not(tmpdir):
     """
     A visible directory is not hidden.
     """
-    target = six.text_type(tmpdir)
+    target = str(tmpdir)
     assert not path.is_hidden(target)
 
 
@@ -21,7 +20,7 @@ def test_is_hidden_not_abspath(tmpdir):
     A visible directory, even if referenced by a relative path,
     should not be considered hidden.
     """
-    target = six.text_type(tmpdir) + '/.'
+    target = str(tmpdir) + '/.'
     assert not path.is_hidden(target)
 
 
