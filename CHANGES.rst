@@ -1,3 +1,8 @@
+v3.1.0
+======
+
+Properly declared dependency on pyobjc for macOS.
+
 v3.0.0
 ======
 

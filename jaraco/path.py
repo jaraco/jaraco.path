@@ -249,6 +249,9 @@ def is_hidden(path):
     Check whether a file is presumed hidden, either because
     the pathname starts with dot or because the platform
     indicates such.
+
+    >>> is_hidden('.')
+    False
     """
     full_path = os.path.abspath(path)
     name = os.path.basename(full_path)
