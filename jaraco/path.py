@@ -316,6 +316,6 @@ def _(content: bytes, path):
     path.write_bytes(content)
 
 
-@create.register
+@create.register  # type: ignore[no-redef]
 def _(content: str, path):
     path.write_text(content)
