@@ -4,6 +4,7 @@ Tools for working with files and file systems
 
 import os
 import re
+import sys
 import itertools
 import functools
 import calendar
@@ -319,3 +320,19 @@ def _(content: bytes, path):
 @create.register  # type: ignore[no-redef]
 def _(content: str, path):
     path.write_text(content)
+
+
+if sys.version_info < (3, 7):
+
+    @create.register(dict)  # type: ignore[no-redef]
+    def _(content, path):
+        path.mkdir(exist_ok=True)
+        build(content, prefix=path)
+
+    @create.register(bytes)  # type: ignore[no-redef]
+    def _(content, path):
+        path.write_bytes(content)
+
+    @create.register(str)  # type: ignore[no-redef]
+    def _(content, path):
+        path.write_text(content)
