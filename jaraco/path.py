@@ -15,6 +15,8 @@ import tempfile
 import platform
 import ctypes
 import importlib
+import pathlib
+from typing import Dict, Union
 
 
 log = logging.getLogger(__name__)
@@ -274,3 +276,37 @@ def is_hidden_Darwin(path):
     url = Foundation.NSURL.fileURLWithPath_(path)
     res = url.getResourceValue_forKey_error_(None, Foundation.NSURLIsHiddenKey, None)
     return res[1]
+
+
+FilesSpec = Dict[str, Union[str, bytes, 'FilesSpec']]  # type: ignore
+
+
+def build(spec: FilesSpec, prefix=pathlib.Path()):
+    """
+    Build a set of files/directories, as described by the spec.
+
+    Each key represents a pathname, and the value represents
+    the content. Content may be a nested directory.
+
+    >>> spec = {
+    ...     'README.txt': "A README file",
+    ...     "foo": {
+    ...         "__init__.py": "",
+    ...         "bar": {
+    ...             "__init__.py": "",
+    ...         },
+    ...         "baz.py": "# Some code",
+    ...     }
+    ... }
+    >>> tmpdir = getfixture('tmpdir')
+    >>> build(spec, tmpdir)
+    """
+    for name, contents in spec.items():
+        path = pathlib.Path(prefix) / name
+        if isinstance(contents, dict):
+            path.mkdir(exist_ok=True)
+            build(contents, prefix=path)
+            continue
+
+        method = path.write_bytes if isinstance(contents, bytes) else path.write_text
+        method(contents)

@@ -1,3 +1,9 @@
+v3.2.0
+======
+
+Added ``jaraco.path.build`` for building dir trees from a
+Python dictionary spec.
+
 v3.1.0
 ======
 
