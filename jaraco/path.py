@@ -302,11 +302,20 @@ def build(spec: FilesSpec, prefix=pathlib.Path()):
     >>> build(spec, tmpdir)
     """
     for name, contents in spec.items():
-        path = pathlib.Path(prefix) / name
-        if isinstance(contents, dict):
-            path.mkdir(exist_ok=True)
-            build(contents, prefix=path)
-            continue
+        create(contents, pathlib.Path(prefix) / name)
 
-        method = path.write_bytes if isinstance(contents, bytes) else path.write_text
-        method(contents)
+
+@functools.singledispatch
+def create(content: dict, path):
+    path.mkdir(exist_ok=True)
+    build(content, prefix=path)
+
+
+@create.register
+def _(content: bytes, path):
+    path.write_bytes(content)
+
+
+@create.register
+def _(content: str, path):
+    path.write_text(content)
