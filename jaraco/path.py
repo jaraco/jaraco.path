@@ -4,7 +4,6 @@ Tools for working with files and file systems
 
 import os
 import re
-import sys
 import itertools
 import functools
 import calendar
@@ -18,6 +17,8 @@ import ctypes
 import importlib
 import pathlib
 from typing import Dict, Union
+
+from singledispatch import singledispatch
 
 
 log = logging.getLogger(__name__)
@@ -306,7 +307,7 @@ def build(spec: FilesSpec, prefix=pathlib.Path()):
         create(contents, pathlib.Path(prefix) / name)
 
 
-@functools.singledispatch
+@singledispatch
 def create(content: dict, path):
     path.mkdir(exist_ok=True)
     build(content, prefix=path)
@@ -320,19 +321,3 @@ def _(content: bytes, path):
 @create.register  # type: ignore[no-redef]
 def _(content: str, path):
     path.write_text(content)
-
-
-if sys.version_info < (3, 7):
-
-    @create.register(dict)  # type: ignore[no-redef]
-    def _(content, path):
-        path.mkdir(exist_ok=True)
-        build(content, prefix=path)
-
-    @create.register(bytes)  # type: ignore[no-redef]
-    def _(content, path):
-        path.write_bytes(content)
-
-    @create.register(str)  # type: ignore[no-redef]
-    def _(content, path):
-        path.write_text(content)
