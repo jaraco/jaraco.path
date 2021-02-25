@@ -1,7 +1,9 @@
-v3.2.1
+v3.3.0
 ======
 
 Disabled PyObjC dependency on PyPy where it's unsupported.
+
+Switched to native namespace package.
 
 v3.2.0
 ======
