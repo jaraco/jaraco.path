@@ -1,3 +1,8 @@
+v3.3.1
+======
+
+Once again attempt to disable PyPy dependency.
+
 v3.3.0
 ======
 
