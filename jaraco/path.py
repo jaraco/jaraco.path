@@ -4,6 +4,7 @@ Tools for working with files and file systems
 
 import os
 import re
+import sys
 import itertools
 import functools
 import calendar
@@ -18,7 +19,10 @@ import importlib
 import pathlib
 from typing import Dict, Union
 
-from singledispatch import singledispatch
+if sys.version_info >= (3, 7):
+    from functools import singledispatch
+else:
+    from singledispatch import singledispatch
 
 
 log = logging.getLogger(__name__)
