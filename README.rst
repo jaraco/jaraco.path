@@ -28,3 +28,21 @@ Hidden File Detection
         print("Your root is hidden")
 
     hidden_dirs = filter(is_hidden, os.listdir('.'))
+
+
+Directory Builder
+-----------------
+
+When testing (and perhaps in other cases), it's often necessary to construct
+a tree of directories/files. This project provides a ``build`` function to
+simply create such a directory from a dictionary definition::
+
+    from jaraco.path import build
+    build(
+        {
+            'foo': 'Content of foo',
+            'subdir': {
+                'foo': 'Content of subdir/foo',
+            },
+        },
+    )
