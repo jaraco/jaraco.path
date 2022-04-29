@@ -306,9 +306,9 @@ def build(spec: FilesSpec, prefix=pathlib.Path()):
 
 
 @functools.singledispatch
-def create(content: dict, path):
+def create(content: Union[str, bytes, 'FilesSpec'], path):
     path.mkdir(exist_ok=True)
-    build(content, prefix=path)
+    build(content, prefix=path)  # type: ignore
 
 
 @create.register
@@ -316,6 +316,6 @@ def _(content: bytes, path):
     path.write_bytes(content)
 
 
-@create.register  # type: ignore[no-redef]
+@create.register
 def _(content: str, path):
     path.write_text(content)
