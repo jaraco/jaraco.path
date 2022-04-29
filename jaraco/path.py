@@ -18,8 +18,6 @@ import importlib
 import pathlib
 from typing import Dict, Union
 
-from singledispatch import singledispatch
-
 
 log = logging.getLogger(__name__)
 
@@ -307,7 +305,7 @@ def build(spec: FilesSpec, prefix=pathlib.Path()):
         create(contents, pathlib.Path(prefix) / name)
 
 
-@singledispatch
+@functools.singledispatch
 def create(content: dict, path):
     path.mkdir(exist_ok=True)
     build(content, prefix=path)
