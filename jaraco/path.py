@@ -298,8 +298,10 @@ def build(spec: FilesSpec, prefix=pathlib.Path()):
     ...         "baz.py": "# Some code",
     ...     }
     ... }
-    >>> tmpdir = getfixture('tmpdir')
-    >>> build(spec, tmpdir)
+    >>> target = getfixture('tmp_path')
+    >>> build(spec, target)
+    >>> target.joinpath('foo/baz.py').read_text()
+    '# Some code'
     """
     for name, contents in spec.items():
         create(contents, pathlib.Path(prefix) / name)
