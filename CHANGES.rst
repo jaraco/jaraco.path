@@ -1,3 +1,8 @@
+v3.4.1
+======
+
+Fixed EncodingWarnings and ResourceWarnings.
+
 v3.4.0
 ======
 

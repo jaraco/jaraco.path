@@ -165,7 +165,7 @@ class save_to_file:
     cleaning up the file afterward.
 
     >>> with save_to_file(b'foo') as filename:
-    ...     assert 'foo' == open(filename).read()
+    ...     assert 'foo' == pathlib.Path(filename).read_text(encoding='utf-8')
     """
 
     def __init__(self, content):
@@ -300,7 +300,7 @@ def build(spec: FilesSpec, prefix=pathlib.Path()):
     ... }
     >>> target = getfixture('tmp_path')
     >>> build(spec, target)
-    >>> target.joinpath('foo/baz.py').read_text()
+    >>> target.joinpath('foo/baz.py').read_text(encoding='utf-8')
     '# Some code'
     """
     for name, contents in spec.items():
@@ -320,4 +320,4 @@ def _(content: bytes, path):
 
 @create.register
 def _(content: str, path):
-    path.write_text(content)
+    path.write_text(content, encoding='utf-8')
