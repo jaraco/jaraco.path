@@ -308,7 +308,7 @@ def build(spec: FilesSpec, prefix=pathlib.Path()):
 
 
 @functools.singledispatch
-def create(content: Union[str, bytes, 'FilesSpec'], path):
+def create(content: Union[str, bytes, FilesSpec], path):
     path.mkdir(exist_ok=True)
     build(content, prefix=path)  # type: ignore
 
