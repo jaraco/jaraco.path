@@ -1,3 +1,9 @@
+v3.5.0
+======
+
+Introduced ``Recording`` object and ``TreeMaker`` protocol,
+with ``build()`` now explicitly accepting any ``TreeMaker``.
+
 v3.4.1
 ======
 

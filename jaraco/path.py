@@ -16,7 +16,7 @@ import platform
 import ctypes
 import importlib
 import pathlib
-from typing import Dict, Union
+from typing import Dict, Union, Protocol, runtime_checkable
 
 
 log = logging.getLogger(__name__)
@@ -281,7 +281,29 @@ def is_hidden_Darwin(path):
 FilesSpec = Dict[str, Union[str, bytes, 'FilesSpec']]  # type: ignore
 
 
-def build(spec: FilesSpec, prefix=pathlib.Path()):
+@runtime_checkable
+class TreeMaker(Protocol):
+    def __truediv__(self, *args, **kwargs):
+        ...  # pragma: no cover
+
+    def mkdir(self, **kwargs):
+        ...  # pragma: no cover
+
+    def write_text(self, content, **kwargs):
+        ...  # pragma: no cover
+
+    def write_bytes(self, content):
+        ...  # pragma: no cover
+
+
+def _ensure_tree_maker(obj: Union[str, TreeMaker]) -> TreeMaker:
+    return obj if isinstance(obj, TreeMaker) else pathlib.Path(obj)  # type: ignore
+
+
+def build(
+    spec: FilesSpec,
+    prefix: Union[str, TreeMaker] = pathlib.Path(),  # type: ignore
+):
     """
     Build a set of files/directories, as described by the spec.
 
@@ -304,7 +326,7 @@ def build(spec: FilesSpec, prefix=pathlib.Path()):
     '# Some code'
     """
     for name, contents in spec.items():
-        create(contents, pathlib.Path(prefix) / name)
+        create(contents, _ensure_tree_maker(prefix) / name)
 
 
 @functools.singledispatch
@@ -321,3 +343,29 @@ def _(content: bytes, path):
 @create.register
 def _(content: str, path):
     path.write_text(content, encoding='utf-8')
+
+
+class Recording:
+    """
+    A TreeMaker object that records everything that would be written.
+
+    >>> r = Recording()
+    >>> build({'foo': {'foo1.txt': 'yes'}, 'bar.txt': 'abc'}, r)
+    >>> r.record
+    ['foo/foo1.txt', 'bar.txt']
+    """
+
+    def __init__(self, loc=pathlib.PurePosixPath(), record=None):
+        self.loc = loc
+        self.record = record if record is not None else []
+
+    def __truediv__(self, other):
+        return Recording(self.loc / other, self.record)
+
+    def write_text(self, content, **kwargs):
+        self.record.append(str(self.loc))
+
+    write_bytes = write_text
+
+    def mkdir(self, **kwargs):
+        return
