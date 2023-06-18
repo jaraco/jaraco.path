@@ -334,13 +334,14 @@ def build(
     ...         },
     ...         "baz.py": "# Some code",
     ...         "bar.py": Symlink("baz.py"),
-    ...     }
+    ...     },
+    ...     "bing": Symlink("foo"),
     ... }
     >>> target = getfixture('tmp_path')
     >>> build(spec, target)
     >>> target.joinpath('foo/baz.py').read_text(encoding='utf-8')
     '# Some code'
-    >>> target.joinpath('foo/bar.py').read_text(encoding='utf-8')
+    >>> target.joinpath('bing/bar.py').read_text(encoding='utf-8')
     '# Some code'
     """
     for name, contents in spec.items():
