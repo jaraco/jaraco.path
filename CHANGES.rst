@@ -1,3 +1,8 @@
+v3.6.0
+======
+
+Added support for ``Symlink``s for the tree maker (``build``).
+
 v3.5.0
 ======
 
