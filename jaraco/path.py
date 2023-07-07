@@ -16,13 +16,8 @@ import platform
 import ctypes
 import importlib
 import pathlib
-from typing import Dict, Union
-
-try:
-    from typing import Protocol, runtime_checkable
-except ImportError:  # pragma: no cover
-    # Python 3.7
-    from typing_extensions import Protocol, runtime_checkable  # type: ignore
+from typing import Dict, Protocol, Union
+from typing import runtime_checkable
 
 
 log = logging.getLogger(__name__)
