@@ -247,7 +247,7 @@ def read_chunks(file, chunk_size=2048, update_func=lambda x: None):
         yield res
 
 
-def is_hidden(path):
+def is_hidden(path) -> bool:
     """
     Check whether a file is presumed hidden, either because
     the pathname starts with dot or because the platform
