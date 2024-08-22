@@ -16,8 +16,7 @@ import platform
 import ctypes
 import importlib
 import pathlib
-from typing import Dict, Protocol, Union
-from typing import runtime_checkable
+from typing import Mapping, Protocol, Union, runtime_checkable
 
 
 log = logging.getLogger(__name__)
@@ -285,7 +284,7 @@ class Symlink(str):
     """
 
 
-FilesSpec = Dict[str, Union[str, bytes, Symlink, 'FilesSpec']]
+FilesSpec = Mapping[str, Union[str, bytes, Symlink, 'FilesSpec']]
 
 
 @runtime_checkable
