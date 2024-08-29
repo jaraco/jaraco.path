@@ -1,4 +1,5 @@
 import os
+import pathlib
 import platform
 
 import pytest
@@ -43,3 +44,12 @@ def test_is_hidden_Darwin():
     target = os.path.expanduser('~/Library')
     assert path.is_hidden(target)
     assert path.is_hidden_Darwin(target)
+
+
+def test_TreeMaker_Protocol() -> None:
+    # Ensure the validity of the TreeMaker Protocol both statically and at runtime
+    tree_maker: path.TreeMaker
+    tree_maker = pathlib.Path()
+    assert isinstance(tree_maker, path.TreeMaker)
+    tree_maker = path.Recording()
+    assert isinstance(tree_maker, path.TreeMaker)
