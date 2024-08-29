@@ -18,7 +18,7 @@ import platform
 import ctypes
 import importlib
 import pathlib
-from typing import TYPE_CHECKING, Dict, Protocol, Union, runtime_checkable
+from typing import TYPE_CHECKING, Mapping, Protocol, Union, runtime_checkable
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -288,7 +288,7 @@ class Symlink(str):
     """
 
 
-FilesSpec = Dict[str, Union[str, bytes, Symlink, 'FilesSpec']]
+FilesSpec = Mapping[str, Union[str, bytes, Symlink, 'FilesSpec']]
 
 
 @runtime_checkable
