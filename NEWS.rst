@@ -1,3 +1,12 @@
+v3.7.2
+======
+
+Bugfixes
+--------
+
+- Fix ``FilesSpec`` parameters variance issues by making it a `typing.Mapping` instead of a `dict` -- by :user:`Avasam` (#3)
+
+
 v3.7.1
 ======
 
