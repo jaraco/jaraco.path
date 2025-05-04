@@ -3,11 +3,12 @@ import pathlib
 import platform
 
 import pytest
+from _pytest._py.path import LocalPath
 
 from jaraco import path
 
 
-def test_is_hidden_not(tmpdir):
+def test_is_hidden_not(tmpdir: LocalPath) -> None:
     """
     A visible directory is not hidden.
     """
@@ -15,7 +16,7 @@ def test_is_hidden_not(tmpdir):
     assert not path.is_hidden(target)
 
 
-def test_is_hidden_not_abspath(tmpdir):
+def test_is_hidden_not_abspath(tmpdir: LocalPath) -> None:
     """
     A visible directory, even if referenced by a relative path,
     should not be considered hidden.
@@ -24,11 +25,11 @@ def test_is_hidden_not_abspath(tmpdir):
     assert not path.is_hidden(target)
 
 
-def test_is_hidden():
+def test_is_hidden() -> None:
     assert path.is_hidden('.hg')
 
 
-def test_is_hidden_Windows(tmpdir):
+def test_is_hidden_Windows(tmpdir: LocalPath) -> None:
     SetFileAttributes = pytest.importorskip(
         'jaraco.windows.api.filesystem.SetFileAttributes'
     )
@@ -39,7 +40,7 @@ def test_is_hidden_Windows(tmpdir):
 
 
 @pytest.mark.skipif(platform.system() != 'Darwin', reason="Darwin only")
-def test_is_hidden_Darwin():
+def test_is_hidden_Darwin() -> None:
     # cheat because ~/Library is presumably hidden
     target = os.path.expanduser('~/Library')
     assert path.is_hidden(target)
