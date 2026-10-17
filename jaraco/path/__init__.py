@@ -28,7 +28,15 @@ log = logging.getLogger(__name__)
 
 def get_unique_pathname(path, root=''):
     """Return a pathname possibly with a number appended to it so that it is
-    unique in the directory."""
+    unique in the directory.
+
+    >>> tmp_path = getfixture('tmp_path')
+    >>> os.path.basename(get_unique_pathname('foo.txt', root=tmp_path))
+    'foo.txt'
+    >>> (tmp_path / 'foo.txt').touch()
+    >>> os.path.basename(get_unique_pathname('foo.txt', root=tmp_path))
+    'foo (1).txt'
+    """
     path = os.path.join(root, path)
     # consider the path supplied, then the paths with numbers appended
     potentialPaths = itertools.chain((path,), __get_numbered_paths(path))
@@ -51,6 +59,12 @@ def splitext_files_only(filepath):
 def set_time(filename, mod_time):
     """
     Set the modified time of a file
+
+    >>> target = getfixture('tmp_path') / 'file.txt'
+    >>> target.touch()
+    >>> set_time(target, datetime.datetime(2020, 1, 2, 3, 4, 5, 600000))
+    >>> get_time(target)
+    datetime.datetime(2020, 1, 2, 3, 4, 5, 600000)
     """
     log.debug('Setting modified time to %s', mod_time)
     mtime = calendar.timegm(mod_time.utctimetuple())
