@@ -4,21 +4,22 @@ Tools for working with files and file systems
 
 from __future__ import annotations
 
-import os
-import re
-import itertools
-import functools
 import calendar
 import contextlib
-import logging
-import datetime
-import glob
-import tempfile
-import platform
 import ctypes
+import datetime
+import functools
+import glob
 import importlib
+import itertools
+import logging
+import os
 import pathlib
-from typing import TYPE_CHECKING, Mapping, Protocol, Union, runtime_checkable
+import platform
+import re
+import tempfile
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Protocol, Union, runtime_checkable
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -47,8 +48,8 @@ def get_unique_pathname(path, root=''):
 def __get_numbered_paths(filepath):
     """Append numbers in sequential order to the filename or folder name
     Numbers should be appended before the extension on a filename."""
-    format = '%s (%%d)%s' % splitext_files_only(filepath)
-    return map(lambda n: format % n, itertools.count(1))
+    base, ext = splitext_files_only(filepath)
+    return (f'{base} ({n}){ext}' for n in itertools.count(1))
 
 
 def splitext_files_only(filepath):
@@ -79,7 +80,8 @@ def get_time(filename):
     Get the modified time for a file as a datetime instance
     """
     ts = os.stat(filename).st_mtime
-    return datetime.datetime.utcfromtimestamp(ts)
+    utc = datetime.datetime.fromtimestamp(ts, tz=datetime.timezone.utc)
+    return utc.replace(tzinfo=None)
 
 
 def insert_before_extension(filename, content):
