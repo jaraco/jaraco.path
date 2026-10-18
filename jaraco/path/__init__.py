@@ -162,7 +162,7 @@ def recursive_glob(root, spec):
         for dirpath, dirnames, filenames in os.walk(root)
         for dirname in dirnames
     )
-
+    specs = itertools.chain((os.path.join(root, spec),), specs)
     return itertools.chain.from_iterable(glob.iglob(spec) for spec in specs)
 
 
